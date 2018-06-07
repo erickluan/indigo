@@ -3,15 +3,15 @@
 
 ## Atributos das Entidades
 * User
-    ** id
-    ** name
-    ** email
-    ** password
+    * id
+    * name
+    * email
+    * password
 * Post
-    ** id
-    ** text
-    ** likes
-    ** uid
+    * id
+    * text
+    * likes
+    * uid
 
 ## Endpoints
 
