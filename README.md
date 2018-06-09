@@ -1,5 +1,5 @@
 # Indigo API REST
-    Construção da API de uma rede social para a disciplina Projeto de Interface Web (2019.1).
+    Construção da API de uma rede social para a disciplina Projeto de Interface Web (2018.1).
 
 ## Atributos das Entidades
 * User
