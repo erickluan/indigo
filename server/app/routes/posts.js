@@ -1,5 +1,5 @@
-let auth = require('../controllers/auth');
-let post = require('../controllers/posts');
+const auth = require('../controllers/auth');
+const post = require('../controllers/posts');
 
 module.exports = function (app) {
     app.get('/api/posts/:id', post.getPostById);

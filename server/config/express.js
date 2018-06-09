@@ -1,18 +1,20 @@
-let express = require('express');
-let bodyParser = require('body-parser');
-let path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const morgan = require('morgan');
 
-let userRoutes = require('../app/routes/users');
-let postRoutes = require('../app/routes/posts');
+const userRoutes = require('../app/routes/users');
+const postRoutes = require('../app/routes/posts');
 
-module.exports = function () {
-    let app = express();
-    app.set('port', 3000);
-    app.use(express.static('./public'));
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: false}));
-    userRoutes(app);
-    postRoutes(app);
+module.exports = () => {
+  const app = express();
+  app.set('port', 3000);
+  app.use(express.static('./public'));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(morgan('dev'));
+  userRoutes(app);
+  postRoutes(app);
 
-    return app;
-}
+  return app;
+};

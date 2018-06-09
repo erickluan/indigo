@@ -1,5 +1,5 @@
-let user = require('../controllers/users');
-let auth = require('../controllers/auth');
+const user = require('../controllers/users');
+const auth = require('../controllers/auth');
 
 module.exports = function (app) {
     app.post('/api/users/signin', auth.signin);

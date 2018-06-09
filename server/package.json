@@ -1,7 +1,7 @@
 {
   "name": "indigo",
   "version": "1.0.0",
-  "description": "",
+  "description": "API Rest da rede social Indigo",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "github.com/erickluan/indigo-node.git"
+    "url": "github.com/erickluan/indigo.git"
   },
   "author": "Erick Luan",
   "license": "ISC",
@@ -18,7 +18,8 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.2",
-    "mongoose": "^5.1.4"
+    "mongoose": "^5.1.4",
+    "morgan": "^1.9.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.5"
