@@ -17,5 +17,6 @@
     "prettier.trailingComma": "es5",
     "prettier.eslintIntegration": true,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
 }
