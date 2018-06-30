@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
 
-module.exports = (function() {
+module.exports = (() => {
   const schema = mongoose.Schema({
     name: {
+      type: String,
+      required: true,
+      minlength: 4,
+    },
+    avatar: {
       type: String,
       required: true,
     },

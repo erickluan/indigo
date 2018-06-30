@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const Post = require('../models/post');
 const User = require('../models/user');
 
-module.exports.newPost = (req, res) => {
+exports.newPost = (req, res) => {
   const token = jwt.decode(req.query.token || req.headers['x-access-token']);
   const post = new Post({
     text: req.body.text,
@@ -12,6 +12,7 @@ module.exports.newPost = (req, res) => {
   Post.create(post)
     .then(newPost => {
       res.status(201).json({
+        success: true,
         message: 'Post created successfully',
         post: {
           _id: newPost._id,
@@ -20,7 +21,7 @@ module.exports.newPost = (req, res) => {
         },
         request: {
           type: 'GET',
-          url: 'http://localhost:3000/api/posts/' + newPost._id,
+          url: 'http://localhost:3000/api/v1/posts/' + newPost._id,
         },
       });
     })
@@ -32,9 +33,9 @@ module.exports.newPost = (req, res) => {
     });
 };
 
-module.exports.getPosts = (req, res) => {
+exports.getPosts = (req, res) => {
   const token = jwt.decode(req.query.token || req.headers['x-access-token']);
-  Post.find({uid: token.id})
+  Post.find({ uid: token.id })
     .select('-__v')
     .populate('uid', 'name -_id')
     .exec()
@@ -50,7 +51,7 @@ module.exports.getPosts = (req, res) => {
     });
 };
 
-module.exports.getPostById = (req, res) => {
+exports.getPostById = (req, res) => {
   const idPost = req.params.id;
   Post.findById(idPost)
     .select('-__v')
@@ -59,17 +60,21 @@ module.exports.getPostById = (req, res) => {
     .then(post => {
       if (!post) {
         return res.status(404).json({
+          success: false,
           message: `This post don't exists.`,
         });
       }
-      res.json(post);
+      res.json({
+        success: true,
+        post: post,
+      });
     })
     .catch(err => {
       res.status(500).json({ error: err });
     });
 };
 
-module.exports.editPost = (req, res) => {
+exports.editPost = (req, res) => {
   const token = jwt.decode(req.query.token || req.headers['x-access-token']);
   const idPost = req.params.id;
   Post.find({ _id: idPost })
@@ -88,10 +93,6 @@ module.exports.editPost = (req, res) => {
                 message: 'Post updated successfully',
                 post: {
                   newText: updated.text,
-                  request: {
-                    type: 'GET',
-                    url: 'http://localhost:3000/api/posts/' + updated._id,
-                  },
                 },
               });
             }
@@ -99,6 +100,7 @@ module.exports.editPost = (req, res) => {
         );
       } else {
         return res.status(401).json({
+          success: false,
           message: `You can't edit this post!`,
         });
       }
@@ -108,25 +110,28 @@ module.exports.editPost = (req, res) => {
     });
 };
 
-module.exports.deletePost = (req, res) => {
+exports.deletePost = (req, res) => {
   const token = jwt.decode(req.query.token || req.headers['x-access-token']);
   const idPost = req.params.id;
   Post.find({ _id: idPost })
     .exec()
     .then(post => {
-      if (!post || post.length === 0) {
-        res
-          .status(404)
-          .json({
-            message: `This post can't be deleted because it's don't exists`,
-          });
+      if (!post) {
+        res.status(404).json({
+          success: false,
+          message: `This post can't be deleted because it's don't exists`,
+        });
       } else {
         if (post[0].uid == token.id) {
           const deletepost = Post.deleteOne({ _id: idPost }).then(result => {
-            res.status(200).json({ message: 'Post deleted successfully!' });
+            res.status(200).json({
+              success: true,
+              message: 'Post deleted successfully!',
+            });
           });
         } else {
           res.status(401).json({
+            success: false,
             message: `You can't delete this post!`,
           });
         }
@@ -137,17 +142,22 @@ module.exports.deletePost = (req, res) => {
     });
 };
 
-module.exports.getUserFromPost = (req, res) => {
+exports.getUserFromPost = (req, res) => {
   const idPost = req.params.id;
-  Post.find( { _id: idPost } )
+  Post.find({ _id: idPost })
     .select('uid -_id')
     .populate('uid', 'id name email')
     .exec()
-    .then( userFromPost => {
+    .then(userFromPost => {
       if (!userFromPost || userFromPost.length === 0) {
-        res.status(400).json({message: `The post don't exists. Because of that we can't find a user.`})
+        res.status(400).json({
+          message: `The post don't exists. Because of that we can't find a user.`,
+        });
       } else {
-        res.json(userFromPost);
+        res.json({
+          success: true,
+          user: userFromPost,
+        });
       }
     })
     .catch(err => {
